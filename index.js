@@ -3,7 +3,16 @@
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
-const wwoApiKey = 'f6d5fa45edf909eaa33b';
+const wwoApiKey = 'e52e6f3256fa4f1abda220042180903';
+
+const host = 'api.worldweatheronline.com';
+var _PremiumApiBaseURL = 'http://api.worldweatheronline.com/premium/v1/';
+/*
+    Please change the PremiumAPIKey to your own. 
+    These keys have been provided for testing only.
+    If you don't have one, then register now: http://developer.worldweatheronline.com/member/register    
+*/
+var _PremiumApiKey = 'e52e6f3256fa4f1abda220042180903';
 
 const restService = express();
 
@@ -39,6 +48,24 @@ function callWeatherApi (city, date) {
         });
       });
     });
+}
+
+function LocalWeatherCallback(localWeather) {
+    let output;
+    output = "<br/> Cloud Cover: " + localWeather.data.current_condition[0].cloudcover;
+    output += "<br/> Humidity: " + localWeather.data.current_condition[0].humidity;
+    output += "<br/> Temp C: " + localWeather.data.current_condition[0].temp_C;
+    output += "<br/> Visibility: " + localWeather.data.current_condition[0].weatherDesc[0].value;
+    output += "<br/> Observation Time: " + localWeather.data.current_condition[0].observation_time;
+    output += "<br/> Pressue: " + localWeather.data.current_condition[0].pressure;
+
+    return output;
+}
+
+function JSONP_LocalWeather(input) {
+    var url = _PremiumApiBaseURL + 'weather.ashx?q=' + input.query + '&format=' + input.format + '&extra=' + input.extra + '&num_of_days=' + input.num_of_days + '&date=' + input.date + '&fx=' + input.fx + '&tp=' + input.tp + '&cc=' + input.cc + '&includelocation=' + input.includelocation + '&show_comments=' + input.show_comments + '&key=' + _PremiumApiKey;
+
+    jsonP(url, input.callback);
 }
 
 restService.use(
@@ -80,6 +107,24 @@ restService.post('/weatherinfo', (req, res) => {
     });
 
 
+});
+
+restService.get('/weather', (req, res) => {
+    var localWeatherInput = {
+        query: req.body.result.parameters['city'],
+        format: 'JSON',
+        num_of_days: '1',
+        date: req.body.result.parameters['date'],
+        fx: '',
+        cc: '',
+        tp: '',
+        includelocation: '',
+        show_comments: '',
+        callback: 'LocalWeatherCallback'
+        },
+        speech;
+        JSONP_LocalWeather(localWeatherInput);
+    
 });
 
 restService.listen(process.env.PORT || 8000, () => {
