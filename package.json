@@ -1,0 +1,24 @@
+{
+  "name": "webhook-dialogflow-weatherinfo-app",
+  "version": "0.1.1",
+  "description": "This is a webhook for a weather app built using dialogflow (api.ai) of google",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SupratikRulz/webhook-dialogflow-weatherinfo-app.git"
+  },
+  "author": "Supratik Basu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SupratikRulz/webhook-dialogflow-weatherinfo-app/issues"
+  },
+  "homepage": "https://github.com/SupratikRulz/webhook-dialogflow-weatherinfo-app#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2"
+  }
+}
